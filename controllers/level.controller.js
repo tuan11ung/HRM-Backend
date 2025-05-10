@@ -1,32 +1,34 @@
 const db = require("../models");
 const { Sequelize, DataTypes } = require('sequelize');
-const Position = db.position;
+const Level = db.level;
 
-exports.create_position = async (req, res) => {
-    const positionName = req.body.position_name;
+exports.create_level = async (req, res) => {
+
     try {
-        if (!positionName) {
+        const levelName = req.body.level_name;
+        if (!levelName) {
             return res.status(500).send({
                 message: "Vui lòng nhập thông tin"
             })
         }
-        Position.create({
-            position_name: req.body.position_name,
+        Level.create({
+            level_name: req.body.level_name,
         })
             .then(user => {
                 return res.status(200).send({
-                    message: "Tạo Position thành công"
+                    message: "Tạo Level thành công"
                 });
             })
             .catch(err => {
-                res.status(500).send({ 
-                    message: err.message 
+                return res.status(500).send({
+                    message: err.message
                 });
             });
-
     } catch (err) {
+        console.log(err);
         return res.status(500).send({
             message: "Có lỗi xảy ra, vui lòng thử lại"
         });
     }
+
 }

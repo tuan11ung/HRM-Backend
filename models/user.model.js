@@ -10,6 +10,9 @@ module.exports = (sequelize, Sequelize) => {
           position_id: {
             type: Sequelize.INTEGER,
           },
+          level_id: {
+            type: Sequelize.INTEGER,
+          },
           email: {
             type: Sequelize.STRING,
             unique: true

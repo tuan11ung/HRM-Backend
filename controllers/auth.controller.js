@@ -49,12 +49,12 @@ exports.signin = (req, res) => {
       }
 
       const token = jwt.sign({ id: user.id },
-                              config.secret,
-                              {
-                                algorithm: 'HS256',
-                                allowInsecureKeySizes: true,
-                                expiresIn: 86400*30, // 24 hours
-                              });
+        config.secret,
+        {
+          algorithm: 'HS256',
+          allowInsecureKeySizes: true,
+          expiresIn: 86400 * 30, // 24 hours
+        });
 
       res.status(200).send({
         id: user.id,

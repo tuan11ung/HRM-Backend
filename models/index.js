@@ -32,6 +32,7 @@ db.sequelize = sequelize;
 // Khai bao cac model
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.position = require("../models/position.model.js")(sequelize, Sequelize);
-
+db.level = require("../models/level.model.js")(sequelize, Sequelize);
+db.vacation = require("../models/vacation.model.js")(sequelize, Sequelize);
 
 module.exports = db;
