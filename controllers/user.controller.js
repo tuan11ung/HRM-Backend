@@ -19,11 +19,18 @@ exports.test = async (req, res) => {
 }
 
 exports.get_all_user = async (req, res) => {
-    // const allUser = await equelize.query('Select * from user"');
-
-    return res.status(200).send({
-        user: allUser
-    })
+    try {
+        const users = await User.findAll();
+        return res.status(200).send({
+            message: "Lấy danh sách user thành công",
+            users: users
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
 }
 
 
@@ -132,3 +139,39 @@ exports.update_user = async (req, res) => {
         });
     }
 }
+
+exports.get_active_users = async (req, res) => {
+    try {
+        // Lấy ngày hiện tại ở định dạng YYYY-MM-DD
+        const today = new Date().toISOString().split('T')[0];
+        // Tìm tất cả user đã check-in và chưa check-out trong ngày hiện tại
+        const activeUsers = await User.findAll({
+            include: [{
+                model: db.attendance, // Giả sử bạn đã định nghĩa mối quan hệ giữa User và Attendance
+                as: 'attendances',
+                where: {
+                    date: today, // Lọc theo ngày hiện tại
+                    time_out: null // Chưa check-out
+                },
+                required: true // Chỉ lấy user có bản ghi attendance thỏa mãn
+            }]
+        });
+
+        // Kiểm tra và trả về kết quả
+        if (activeUsers.length > 0) {
+            return res.status(200).send({
+                users: activeUsers,
+
+            });
+        } else {
+            return res.status(404).send({
+                message: "Không tìm thấy user nào đang làm việc"
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+};

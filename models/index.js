@@ -37,4 +37,14 @@ db.vacation = require("../models/vacation.model.js")(sequelize, Sequelize);
 db.event = require("../models/event.model.js")(sequelize, Sequelize);
 db.attendance = require("../models/attendance.model.js")(sequelize, Sequelize);
 
+// Thiết lập quan hệ giữa user và attendance
+db.user.hasMany(db.attendance, {
+  foreignKey: 'employee_id',
+  as: 'attendances'
+});
+db.attendance.belongsTo(db.user, {
+  foreignKey: 'employee_id',
+  as: 'user'
+});
+
 module.exports = db;

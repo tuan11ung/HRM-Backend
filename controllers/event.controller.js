@@ -267,3 +267,45 @@ exports.delete_event = async (req, res) => {
         });
     }
 }
+
+exports.get_nearest_event = async (req, res) => {
+    try {
+        const now = new Date();
+        const currentDateString = now.toISOString().split('T')[0]; // 'YYYY-MM-DD'
+        const currentTime = now.toTimeString().split(' ')[0]; // 'HH:MM:SS'
+
+        const events = await Event.findAll({
+            where: {
+                [Sequelize.Op.or]: [
+                    {
+                        date: { [Sequelize.Op.gt]: currentDateString }
+                    },
+                    {
+                        date: currentDateString,
+                        time: { [Sequelize.Op.gte]: currentTime }
+                    }
+                ]
+            },
+            order: [
+                ['date', 'ASC'],
+                ['time', 'ASC']
+            ],
+            limit: 3
+        });
+
+        if (events.length === 0) {
+            return res.status(200).send({
+                message: "Không có sự kiện nào sắp tới"
+            });
+        }
+
+        return res.status(200).send({
+            data: events
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}

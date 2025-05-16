@@ -15,4 +15,5 @@ module.exports = function(app) {
     app.get("/api/event/:id", [authJwt.verifyToken], controller.get_event_by_id);
     app.post("/api/event/:id", [authJwt.verifyToken], controller.update_event);
     app.delete("/api/event/:id", [authJwt.verifyToken], controller.delete_event);
+    app.get("/api/event-nearest", [authJwt.verifyToken], controller.get_nearest_event);
 };
