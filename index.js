@@ -6,6 +6,9 @@ const morgan = require("morgan");
 const dotenv = require("dotenv");
 const { Sequelize } = require('sequelize');
 
+// Load environment variables
+dotenv.config();
+
 // Connect to database
 const db = require("./models");
 
@@ -36,6 +39,7 @@ require("./routes/user.route")(app);
 require("./routes/position.route")(app);
 require("./routes/level.route")(app);
 require("./routes/vacation.route")(app);
+require("./routes/upload.route")(app);
 
 
 const PORT = process.env.PORT || 8080;
