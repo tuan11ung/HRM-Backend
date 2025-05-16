@@ -10,9 +10,6 @@ module.exports = function(app) {
     next();
   });
   
-  // Route for uploading an image file to Cloudflare Images
-  app.post("/api/upload/image", [authJwt.verifyToken], controller.uploadImage);
-  
-  // Route for uploading an image from URL to Cloudflare Images
-  app.post("/api/upload/image-url", [authJwt.verifyToken], controller.uploadImageUrl);
+  // Route for uploading an image to Cloudflare R2
+  app.post("/api/upload/image", controller.uploadImage);
 }; 

@@ -1,23 +1,27 @@
-# Cloudflare Images API Integration
+# Cloudflare R2 Image Upload Integration
 
-This integration allows users to upload images to Cloudflare Images and receive back the public URL of the uploaded image along with variants.
+This integration allows users to upload images to Cloudflare R2 storage and receive back the public URL of the uploaded image.
 
 ## Setup
 
-1. Create a Cloudflare account if you don't have one
-2. Set up Cloudflare Images in your account
-3. Create an API token with the necessary permissions to access Cloudflare Images
-4. Add the following environment variables to your `.env` file:
+1. Create a Cloudflare R2 account if you don't have one
+2. Create a bucket in your Cloudflare R2 dashboard
+3. Set up public access for your bucket (Create a Public R2 Bucket or configure CORS)
+4. Create API tokens with appropriate permissions
+5. Add the following environment variables to your `.env` file:
 
 ```
-# Cloudflare Images API Configuration
-CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
-CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
+# Cloudflare R2 settings
+CLOUDFLARE_R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
+CLOUDFLARE_R2_ACCESS_KEY_ID=your_access_key_id
+CLOUDFLARE_R2_SECRET_ACCESS_KEY=your_secret_access_key
+CLOUDFLARE_R2_BUCKET_NAME=your_bucket_name
+CLOUDFLARE_R2_PUBLIC_URL=https://pub-your-bucket-url.r2.dev
 ```
 
 ## API Usage
 
-### Upload an image file
+### Upload an image
 
 **Endpoint:** `POST /api/upload/image`
 
@@ -30,7 +34,6 @@ CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
   - `Content-Type`: `multipart/form-data`
 - Body:
   - `image`: The image file to upload (form-data)
-  - `metadata`: Optional JSON string with metadata (form-data)
 
 **Response:**
 ```json
@@ -38,76 +41,16 @@ CLOUDFLARE_API_TOKEN=your_cloudflare_api_token
   "status": "success",
   "message": "Image uploaded successfully",
   "data": {
-    "id": "2cdc28f0-017a-49c4-9ed7-87056c83901",
-    "filename": "image.jpeg",
-    "metadata": {
-      "key": "value"
-    },
-    "uploaded": "2022-01-31T16:39:28.458Z",
-    "requireSignedURLs": false,
-    "variants": [
-      "https://imagedelivery.net/Vi7wi5KSItxGFsWRG2Us6Q/2cdc28f0-017a-49c4-9ed7-87056c83901/public",
-      "https://imagedelivery.net/Vi7wi5KSItxGFsWRG2Us6Q/2cdc28f0-017a-49c4-9ed7-87056c83901/thumbnail"
-    ]
+    "url": "https://pub-your-bucket-url.r2.dev/1721234567890-image.jpg"
   }
 }
 ```
-
-### Upload an image via URL
-
-**Endpoint:** `POST /api/upload/image-url`
-
-**Authentication:** Required (JWT Token)
-
-**Request:**
-- Method: `POST`
-- Headers:
-  - `x-access-token`: Your JWT token
-  - `Content-Type`: `application/json`
-- Body:
-```json
-{
-  "url": "https://example.com/path/to/image.jpg",
-  "metadata": {
-    "key": "value"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "status": "success",
-  "message": "Image uploaded successfully",
-  "data": {
-    "id": "2cdc28f0-017a-49c4-9ed7-87056c83901",
-    "filename": "image.jpeg",
-    "metadata": {
-      "key": "value"
-    },
-    "uploaded": "2022-01-31T16:39:28.458Z",
-    "requireSignedURLs": false,
-    "variants": [
-      "https://imagedelivery.net/Vi7wi5KSItxGFsWRG2Us6Q/2cdc28f0-017a-49c4-9ed7-87056c83901/public",
-      "https://imagedelivery.net/Vi7wi5KSItxGFsWRG2Us6Q/2cdc28f0-017a-49c4-9ed7-87056c83901/thumbnail"
-    ]
-  }
-}
-```
-
-## Supported Formats
-
-Cloudflare Images supports the following formats:
-- JPEG
-- PNG
-- GIF (including animated GIFs)
-- WebP
 
 ## Error Handling
 
 The API returns appropriate error messages for:
-- Missing image or URL
-- Unsupported file formats
-- Files exceeding the size limit (10MB)
+- Missing image
+- Non-image files
+- Files exceeding the size limit (5MB)
 - Authentication failures
 - Server errors 

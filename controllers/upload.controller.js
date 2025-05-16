@@ -1,16 +1,15 @@
-const { uploadImageToCloudflare, uploadImageUrlToCloudflare } = require('../utils/cloudflare-images.util');
+const { uploadFileToR2 } = require('../utils/cloudflare.util');
 const multer = require('multer');
 
-// Configure multer for memory storage (we need the buffer for uploading to Cloudflare Images)
+// Configure multer for memory storage (we need the buffer for uploading to R2)
 const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB limit
   },
   fileFilter: (req, file, cb) => {
-    // Accept only image files - check Cloudflare Images supported formats
-    // https://developers.cloudflare.com/images/upload-images/formats-limitations/
+    // Accept only image files
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -19,7 +18,7 @@ const upload = multer({
   }
 }).single('image'); // 'image' is the field name in the form
 
-// Upload image to Cloudflare Images
+// Upload image to Cloudflare R2
 exports.uploadImage = (req, res) => {
   upload(req, res, async (err) => {
     if (err) {
@@ -37,28 +36,25 @@ exports.uploadImage = (req, res) => {
     }
 
     try {
-      // Add optional metadata if provided in the request
-      const metadata = req.body.metadata ? JSON.parse(req.body.metadata) : {};
-      
-      // Upload file to Cloudflare Images
-      const result = await uploadImageToCloudflare(
+      // Upload file to Cloudflare R2
+      const fileUrl = await uploadFileToR2(
         req.file.buffer,
         req.file.originalname,
-        req.file.mimetype,
-        metadata
+        req.file.mimetype
       );
 
       return res.status(200).json({
         status: 'success',
         message: 'Image uploaded successfully',
-        data: result.result
+        data: {
+          url: fileUrl
+        }
       });
     } catch (error) {
       console.error('Error in upload controller:', error);
       return res.status(500).json({
         status: 'error',
-        message: 'Failed to upload image',
-        error: error.response?.data || error.message
+        message: 'Failed to upload image'
       });
     }
   });
