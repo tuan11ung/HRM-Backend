@@ -35,5 +35,6 @@ db.position = require("../models/position.model.js")(sequelize, Sequelize);
 db.level = require("../models/level.model.js")(sequelize, Sequelize);
 db.vacation = require("../models/vacation.model.js")(sequelize, Sequelize);
 db.event = require("../models/event.model.js")(sequelize, Sequelize);
+db.attendance = require("../models/attendance.model.js")(sequelize, Sequelize);
 
 module.exports = db;
