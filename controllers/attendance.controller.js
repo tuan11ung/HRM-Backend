@@ -27,7 +27,7 @@ exports.check_in = async (req, res) => {
         }
 
         if (timeIn > "08:00:00") {
-            // Nếu check-in sau 9h thì đánh dấu là muộn
+            // Nếu check-in sau 8h thì đánh dấu là muộn
             await Attendance.create({
                 employee_id: employeeId,
                 date: date,
