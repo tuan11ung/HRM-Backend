@@ -40,6 +40,7 @@ require("./routes/position.route")(app);
 require("./routes/level.route")(app);
 require("./routes/vacation.route")(app);
 require("./routes/upload.route")(app);
+require("./routes/event.route")(app);
 
 
 const PORT = process.env.PORT || 8080;
