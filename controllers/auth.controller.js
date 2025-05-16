@@ -30,7 +30,7 @@ exports.signin = (req, res) => {
   })
     .then(user => {
       if (!user) {
-        return res.status(201).send({
+        return res.status(401).send({
           accessToken: null,
           message: "Tài khoản không tồn tại, vui lòng tạo mới tài khoản"
         });
@@ -42,7 +42,7 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(201).send({
+        return res.status(401).send({
           accessToken: null,
           message: "Sai mật khẩu, vui lòng thử lại"
         });

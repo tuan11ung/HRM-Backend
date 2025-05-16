@@ -30,11 +30,20 @@ module.exports = (sequelize, Sequelize) => {
           image: {
             type: Sequelize.STRING,
           },
+          avatar: {
+            type: Sequelize.STRING,
+            allowNull: true,
+          },
           birthday: {
             type: Sequelize.DATE,
           },
           password: {
             type: Sequelize.STRING,
+          },
+          role: {
+            type: Sequelize.ENUM('Admin', 'Employee'),
+            allowNull: false,
+            defaultValue: 'Employee'
           },
           created_at: {
             type: Sequelize.DATE,

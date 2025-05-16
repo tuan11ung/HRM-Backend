@@ -66,9 +66,6 @@ exports.create_new_user = async (req, res) => {
     const email = req.body.email;
     const mobile_phone = req.body.mobile_phone;
     const name = req.body.name;
-    const address = req.body.address;
-    const image = req.body.image;
-    const birthday = req.body.birthday;
     const password = req.body.password;
 
     try {
@@ -106,6 +103,7 @@ exports.update_user = async (req, res) => {
     const birthday = req.body.birthday;
     const email = req.body.email;
     const mobile_phone = req.body.mobile_phone;
+    const avatar = req.body.avatar;
 
     const user_id = req.userId;
 
@@ -124,7 +122,8 @@ exports.update_user = async (req, res) => {
             address: address || update_user.address,
             birthday: birthday || update_user.birthday,
             email: email || update_user.email,
-            mobile_phone: mobile_phone || update_user.mobile_phone
+            mobile_phone: mobile_phone || update_user.mobile_phone,
+            avatar: avatar || update_user.avatar
         })
 
         await update_user.save();

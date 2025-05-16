@@ -28,8 +28,8 @@ exports.create_event = async (req, res) => {
             time: time,
             description: description,
             repeat_event_type: repeat_event_type,
-            repeat_event_day: repeat_event_day,
-            repeat_event_time: repeat_event_time
+            repeat_event_day: repeat_event_day || null,
+            repeat_event_time: repeat_event_time || null
         })
             .then(user => {
                 return res.status(200).send({
@@ -301,6 +301,47 @@ exports.get_nearest_event = async (req, res) => {
 
         return res.status(200).send({
             data: events
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
+// For admin
+exports.get_all_event_for_admin = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const offset = (page - 1) * limit;
+        const searchName = req.query.name || '';
+
+        const whereCondition = {};
+        if (searchName) {
+            whereCondition.name = {
+                [Sequelize.Op.like]: `%${searchName}%`
+            };
+        }
+
+        const { count, rows: events } = await Event.findAndCountAll({
+            where: whereCondition,
+            limit: limit,
+            offset: offset,
+            order: [['createdAt', 'DESC']]
+        });
+
+        const totalPages = Math.ceil(count / limit);
+
+        return res.status(200).send({
+            data: events,
+            pagination: {
+                totalItems: count,
+                totalPages: totalPages,
+                currentPage: page,
+                itemsPerPage: limit
+            }
         });
     } catch (err) {
         console.log(err);
