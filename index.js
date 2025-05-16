@@ -23,9 +23,9 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:3000",  // Allow requests from this origin
-  methods: ['GET', 'POST'],  // Allow these HTTP methods
-  allowedHeaders: ['Content-Type', 'access_token'],  // Allow these headers
+  origin: ["http://localhost:3000", "http://localhost:5173"],  // Allow requests from these origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow these HTTP methods
+  allowedHeaders: ['Content-Type', 'access_token', 'Authorization'],  // Allow these headers
 }));
 app.use(morgan("common"));
 
