@@ -12,7 +12,7 @@ exports.signup = (req, res) => {
   user.create({
     email: req.body.email,
     name: req.body.name,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
   })
     .then(user => {
       res.send({ message: "user registered successfully!" });
@@ -48,7 +48,7 @@ exports.signin = (req, res) => {
         });
       }
 
-      const token = jwt.sign({ id: user.id },
+      const token = jwt.sign({ id: user.id, role: user.role },
         config.secret,
         {
           algorithm: 'HS256',
@@ -60,6 +60,7 @@ exports.signin = (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
         accessToken: token
       });
     })

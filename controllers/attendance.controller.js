@@ -2,6 +2,31 @@ const db = require("../models");
 const { Sequelize, DataTypes } = require('sequelize');
 const Attendance = db.attendance;
 
+
+exports.get_today_attendance_status = async (req, res) => {
+    try {
+        const employeeId = req.userId;
+        const currentDate = new Date();
+        const date = currentDate.toISOString().split('T')[0]; // Ngày dạng 'YYYY-MM-DD'
+
+        const attendance = await Attendance.findOne({
+            where: {
+                employee_id: employeeId,
+                date: date
+            }
+        });
+        return res.status(200).send({
+            message: "Trạng thái check-in hôm nay",
+            attendance: attendance
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
 exports.check_in = async (req, res) => {
     try {
         // Lấy employeeId từ body của request
@@ -137,3 +162,19 @@ exports.get_all_attendance = async (req, res) => {
         });
     }
 };
+
+exports.get_attendance_by_id = async (req, res) => {
+    try {
+        const attendanceId = req.params.id;
+        const attendance = await Attendance.findByPk(attendanceId);
+        return res.status(200).send({
+            message: "Lấy thông tin điểm danh thành công",
+            attendance: attendance
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}

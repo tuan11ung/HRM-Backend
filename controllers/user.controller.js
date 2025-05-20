@@ -6,16 +6,20 @@ const Op = require('sequelize').Op
 
 var bcrypt = require("bcryptjs");
 
-exports.test = async (req, res) => {
-    const userId = req.query.user_id;
-    const email = req.body.email;
-    const password = req.body.password;
-    return res.status(200).send({
-        userId: userId,
-        email: email,
-        password: password,
-        token: token,
-    })
+exports.get_information = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const user = await User.findByPk(userId);
+        return res.status(200).send({
+            message: "Lấy thông tin user thành công",
+            user: user
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
 }
 
 exports.get_all_user = async (req, res) => {
@@ -163,7 +167,7 @@ exports.get_active_users = async (req, res) => {
 
             });
         } else {
-            return res.status(404).send({
+            return res.status(201).send({
                 message: "Không tìm thấy user nào đang làm việc"
             });
         }
