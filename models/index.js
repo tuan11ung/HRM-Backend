@@ -47,4 +47,23 @@ db.attendance.belongsTo(db.user, {
   as: 'user'
 });
 
+// Fix relationships between user, level and position
+db.level.hasMany(db.user, {
+  foreignKey: 'level_id',
+  as: 'users'
+});
+db.user.belongsTo(db.level, {
+  foreignKey: 'level_id',
+  as: 'level'
+});
+
+db.position.hasMany(db.user, {
+  foreignKey: 'position_id',
+  as: 'users'
+});
+db.user.belongsTo(db.position, {
+  foreignKey: 'position_id',
+  as: 'position'
+});
+
 module.exports = db;

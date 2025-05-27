@@ -14,6 +14,7 @@ module.exports = function(app) {
     app.get("/api/user/:id",  [authJwt.verifyToken] , controller.get_user_by_id);
     app.post("/api/user", controller.create_new_user);
     app.post("/api/user/update", [authJwt.verifyToken], controller.update_user);
+    app.put("/api/user/update-admin/:id", [authJwt.verifyToken], controller.update_user_for_admin);
     app.get("/api/user-active",[authJwt.verifyToken], controller.get_active_users);
     app.get("/api/user-information", [authJwt.verifyToken], controller.get_information);
   };
