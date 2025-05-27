@@ -12,7 +12,10 @@ module.exports = function(app) {
     
     app.post("/api/vacation", [authJwt.verifyToken], controller.create_vacation);
     app.get("/api/vacation", [authJwt.verifyToken], controller.get_all_vacation);
+    app.put("/api/vacation/:id", [authJwt.verifyToken], controller.update_pending_vacation);
+    app.delete("/api/vacation/:id", [authJwt.verifyToken], controller.delete_vacation);
     app.get("/api/vacation/:id", [authJwt.verifyToken], controller.get_vacation_by_id);
-    app.post("/api/vacation/approve/:id", [authJwt.verifyToken], controller.approve_vacation);
-    app.post("/api/vacation/reject/:id", [authJwt.verifyToken], controller.decline_vacation);
+    app.put("/api/vacation/admin/approve/:id", [authJwt.verifyToken], controller.approve_vacation);
+    app.put("/api/vacation/admin/reject/:id", [authJwt.verifyToken], controller.decline_vacation);
+    app.get("/api/vacation/admin/get-all", [authJwt.verifyToken], controller.get_all_vacation_by_admin);
 };

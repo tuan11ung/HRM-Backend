@@ -42,6 +42,7 @@ require("./routes/vacation.route")(app);
 require("./routes/upload.route")(app);
 require("./routes/event.route")(app);
 require("./routes/attendance.route")(app);
+require("./routes/notification.route")(app);
 
 
 const PORT = process.env.PORT || 8080;

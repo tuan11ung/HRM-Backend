@@ -36,6 +36,7 @@ db.level = require("../models/level.model.js")(sequelize, Sequelize);
 db.vacation = require("../models/vacation.model.js")(sequelize, Sequelize);
 db.event = require("../models/event.model.js")(sequelize, Sequelize);
 db.attendance = require("../models/attendance.model.js")(sequelize, Sequelize);
+db.notification = require("../models/notification.model.js")(sequelize, Sequelize);
 
 // Thiết lập quan hệ giữa user và attendance
 db.user.hasMany(db.attendance, {
@@ -64,6 +65,36 @@ db.position.hasMany(db.user, {
 db.user.belongsTo(db.position, {
   foreignKey: 'position_id',
   as: 'position'
+});
+
+// Thiết lập quan hệ giữa user và notification
+db.user.hasMany(db.notification, {
+  foreignKey: 'from_user_id',
+  as: 'sent_notifications'
+});
+db.notification.belongsTo(db.user, {
+  foreignKey: 'from_user_id',
+  as: 'sender'
+});
+
+// Thiết lập quan hệ giữa user và notification (receiver)
+db.user.hasMany(db.notification, {
+  foreignKey: 'to_user_id',
+  as: 'received_notifications'
+});
+db.notification.belongsTo(db.user, {
+  foreignKey: 'to_user_id',
+  as: 'receiver'
+});
+
+// Thiết lập quan hệ giữa user và vacation
+db.user.hasMany(db.vacation, {
+  foreignKey: 'user_id',
+  as: 'vacations'
+});
+db.vacation.belongsTo(db.user, {
+  foreignKey: 'user_id',
+  as: 'user'
 });
 
 module.exports = db;

@@ -32,7 +32,15 @@ exports.get_information = async (req, res) => {
 
 exports.get_all_user = async (req, res) => {
     try {
-        const users = await User.findAll();
+        const users = await User.findAll({
+            include: [{
+                model: db.position,
+                as: 'position'
+            }, {
+                model: db.level,
+                as: 'level'
+            }]
+        });
         return res.status(200).send({
             message: "Lấy danh sách user thành công",
             users: users
