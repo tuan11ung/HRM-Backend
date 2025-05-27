@@ -32,3 +32,46 @@ exports.create_level = async (req, res) => {
     }
 
 }
+
+exports.get_all_level = async (req, res) => {
+    try {
+        const levels = await Level.findAll();
+        return res.status(200).send({
+            message: "Lấy danh sách Level thành công",
+            data: levels
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
+exports.update_level = async (req, res) => {
+    try {
+        const levelId = req.params.id;
+        const levelName = req.body.level_name;
+        await Level.update({ level_name: levelName }, { where: { id: levelId } });
+        return res.status(200).send({
+            message: "Cập nhật Level thành công"
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
+exports.delete_level = async (req, res) => {
+    try {
+        const levelId = req.params.id;
+        await Level.destroy({ where: { id: levelId } });
+        return res.status(200).send({
+            message: "Xóa Level thành công"
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}

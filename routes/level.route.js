@@ -11,4 +11,7 @@ module.exports = function(app) {
     });
     
     app.post("/api/level", [authJwt.verifyToken], controller.create_level);
+    app.get("/api/level", [authJwt.verifyToken], controller.get_all_level);
+    app.delete("/api/level/:id", [authJwt.verifyToken], controller.delete_level);
+    app.put("/api/level/:id", [authJwt.verifyToken], controller.update_level);
 };

@@ -30,3 +30,46 @@ exports.create_position = async (req, res) => {
         });
     }
 }
+
+exports.get_all_position = async (req, res) => {
+    try {
+        const positions = await Position.findAll();
+        return res.status(200).send({
+            message: "Lấy danh sách Position thành công",
+            data: positions
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
+exports.update_position = async (req, res) => {
+    try {
+        const positionId = req.params.id;
+        const positionName = req.body.position_name;
+        await Position.update({ position_name: positionName }, { where: { id: positionId } });
+        return res.status(200).send({
+            message: "Cập nhật Position thành công"
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}
+
+exports.delete_position = async (req, res) => {
+    try {
+        const positionId = req.params.id;
+        await Position.destroy({ where: { id: positionId } });
+        return res.status(200).send({
+            message: "Xóa Position thành công"
+        });
+    } catch (err) {
+        return res.status(500).send({
+            message: "Có lỗi xảy ra, vui lòng thử lại"
+        });
+    }
+}

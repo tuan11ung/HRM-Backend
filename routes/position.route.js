@@ -11,4 +11,7 @@ module.exports = function(app) {
     });
     
     app.post("/api/position", [authJwt.verifyToken], controller.create_position);
+    app.get("/api/position", [authJwt.verifyToken], controller.get_all_position);
+    app.delete("/api/position/:id", [authJwt.verifyToken], controller.delete_position);
+    app.put("/api/position/:id", [authJwt.verifyToken], controller.update_position);
 };
